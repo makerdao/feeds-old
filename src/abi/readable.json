@@ -1,0 +1,95 @@
+[
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "read",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "peek",
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32"
+      },
+      {
+        "name": "",
+        "type": "bool"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "owner",
+    "outputs": [
+      {
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "zzz",
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint32"
+      }
+    ],
+    "payable": false,
+    "type": "function"
+  },
+  {
+    "anonymous": true,
+    "inputs": [
+      {
+        "indexed": true,
+        "name": "sig",
+        "type": "bytes4"
+      },
+      {
+        "indexed": true,
+        "name": "guy",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "name": "foo",
+        "type": "bytes32"
+      },
+      {
+        "indexed": true,
+        "name": "bar",
+        "type": "bytes32"
+      },
+      {
+        "indexed": false,
+        "name": "wad",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "name": "fax",
+        "type": "bytes"
+      }
+    ],
+    "name": "LogNote",
+    "type": "event"
+  }
+]
