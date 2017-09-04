@@ -49,11 +49,10 @@ class App extends Component {
     this.setState({ feeds });
     window.feeds = feeds;
     feeds.forEach(address => {
-      this.updateFeed(address);
+      this.updateFeed(address, false);
       web3.eth.filter({ address }, (error, result) => {
         if (!error) {
-          console.log(result);
-          this.updateFeed(result.address);
+          this.updateFeed(result.address, true);
         }
       });
     });
@@ -67,7 +66,7 @@ class App extends Component {
     });
   }
 
-  updateFeed = async (address) => {
+  updateFeed = async (address, fromEvent) => {
     const c = web3.eth.contract(readableAbi).at(address);
     const value = await read(c, 'peek');
     const zzz = await read(c, 'zzz');
@@ -80,7 +79,8 @@ class App extends Component {
           zzz: web3.toDecimal(zzz),
           expires: web3.toDecimal(zzz) - (Math.floor(Date.now() / 1000)),
           owner: owner,
-          valid: value[1]
+          valid: value[1],
+          updated: fromEvent ? Math.floor(Date.now() / 1000) : null
         }
       }
     });
