@@ -76,6 +76,7 @@ class App extends Component {
       [address]: {
         value: web3.fromWei(value[0]),
         zzz: web3.toDecimal(zzz),
+        expires: web3.toDecimal(zzz) - (Math.floor(Date.now() / 1000)),
         owner: owner,
         valid: value[1]
       }
