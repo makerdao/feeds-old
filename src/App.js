@@ -94,11 +94,35 @@ class App extends Component {
         const med = web3.eth.contract(medianizerAbi).at(medianizerAddress);
         window.med = med;
         this.setState({
-          medianizer: medianizerAddress
+          medianizer: medianizerAddress,
+          noConnection: false
         });
         this.loadMedianizer(med);
+      } else {
+        this.setState({
+          noConnection: true
+        })
+        this.loadFromEtherscan('0x729D19f657BD0614b4985Cf1D82531c67569197B');
       }
     });
+  }
+
+  loadFromEtherscan = (address) => {
+    fetch(`https://api.etherscan.io/api?module=proxy&action=eth_call&to=${address}&data=0x57de26a4&apikey=YourApiKeyToken`)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+      })
+      .then(json => {
+        const value = web3.fromWei(json.result);
+        this.setState({
+          value
+        })
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   updateExpirations = () => {
@@ -126,12 +150,14 @@ class App extends Component {
     return (
       <div>
         <Medianizer medianizer={this.state.medianizer} value={this.state.value} valid={this.state.valid} />
-        <p>
-          This value is taken from the following feeds:
-        </p>
-        {feeds.map((x, i) =>
-          this.state[x] && <Feed key={i} idx={i + 1} address={x} {...this.state[x]} />
-        )}
+        {this.state.noConnection === true &&
+          <p>This data was loaded from Etherscan. Please use an Ethereum enabled browser like Mist, or install Metamask or Parity extensions to view this feed's details.</p>
+        }
+        {this.state.noConnection === false &&
+          feeds.map((x, i) =>
+            this.state[x] && <Feed key={i} idx={i + 1} address={x} {...this.state[x]} />
+          )
+        }
       </div>
     );
   }
