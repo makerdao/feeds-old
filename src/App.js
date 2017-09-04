@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import Web3 from 'web3';
 import BigNumber from 'bignumber.js';
-import './App.css';
+import web3, { initWeb3 } from './web3';
+import Medianizer from './Medianizer';
 import Feed from './Feed';
+import './App.css';
 
 const readableAbi = require('./abi/readable.json');
 const medianizerAbi = require('./abi/medianizer.json');
@@ -31,14 +32,12 @@ class App extends Component {
     feeds: []
   }
 
-  web3 = null;
-
-  loadMedianizer = async (web3, med) => {
+  loadMedianizer = async (med) => {
     const values = [];
-    this.updateMedianizer(web3, med);
+    this.updateMedianizer(med);
     web3.eth.filter({ address: med.address }, (error, result) => {
       if (!error) {
-        this.updateMedianizer(web3, med);
+        this.updateMedianizer(med);
       }
     });
     const res = await read(med, 'next');
@@ -50,68 +49,88 @@ class App extends Component {
     this.setState({ feeds });
     window.feeds = feeds;
     feeds.forEach(address => {
-      this.updateFeed(web3, address);
+      this.updateFeed(address);
       web3.eth.filter({ address }, (error, result) => {
         if (!error) {
-          this.updateFeed(web3, result.address);
+          console.log(result);
+          this.updateFeed(result.address);
         }
       });
     });
   }
 
-  updateMedianizer = async (web3, med) => {
+  updateMedianizer = async (med) => {
     const value = await read(med, 'peek');
     this.setState({
       value: web3.fromWei(value[0]),
       valid: value[1]
-    })
+    });
   }
 
-  updateFeed = async (web3, address) => {
+  updateFeed = async (address) => {
     const c = web3.eth.contract(readableAbi).at(address);
     const value = await read(c, 'peek');
     const zzz = await read(c, 'zzz');
     const owner = await read(c, 'owner');
-    this.setState({
-      [address]: {
-        value: web3.fromWei(value[0]),
-        zzz: web3.toDecimal(zzz),
-        expires: web3.toDecimal(zzz) - (Math.floor(Date.now() / 1000)),
-        owner: owner,
-        valid: value[1]
+    this.setState((prevState) => {
+      prevState[address] && console.log(`${address} updated to ${web3.fromWei(value[0])} from ${prevState[address].value}`);
+      return {
+        [address]: {
+          value: web3.fromWei(value[0]),
+          zzz: web3.toDecimal(zzz),
+          expires: web3.toDecimal(zzz) - (Math.floor(Date.now() / 1000)),
+          owner: owner,
+          valid: value[1]
+        }
       }
     });
   }
 
   init = () => {
-    this.web3 = new Web3();
-    this.web3.setProvider(window.web3.currentProvider);
-    window.web3 = this.web3;
-    
-    this.web3.version.getNetwork((error, network) => {
+    initWeb3(web3);
+    web3.version.getNetwork((error, network) => {
       if (!error) {
-        const medianizerAddress = network === "1" ? '0x729D19f657BD0614b4985Cf1D82531c67569197B' : '0xa944bd4b25c9f186a846fd5668941aa3d3b8425f';        
-        const med = this.web3.eth.contract(medianizerAbi).at(medianizerAddress);
+        const medianizerAddress = network === "1" ? '0x729D19f657BD0614b4985Cf1D82531c67569197B' : '0xa944bd4b25c9f186a846fd5668941aa3d3b8425f';
+        const med = web3.eth.contract(medianizerAbi).at(medianizerAddress);
         window.med = med;
         this.setState({
           medianizer: medianizerAddress
         });
-        this.loadMedianizer(this.web3, med);
+        this.loadMedianizer(med);
       }
     });
   }
+
+  updateExpirations = () => {
+    const feeds = this.state.feeds;
+    this.setState(prevState => {
+      const state = {...this.prevState};
+      feeds.forEach(feed => {
+        if (prevState[feed]) {
+          state[feed] = {
+            ...prevState[feed],
+            expires: prevState[feed].expires - 1
+          }
+        }
+      });
+      return state;
+    })
+  }
+
   componentDidMount() {
     setTimeout(() => this.init(), 500);
+    setInterval(() => this.updateExpirations(), 1000);
   }
   render() {
     const feeds = this.state.feeds;
     return (
       <div>
-        <h1>Feeds</h1>
-        <h2>{this.state.medianizer}</h2>
-        <h3>{this.state.value} {this.state.valid ? 'valid' : ''}</h3>
-        {feeds.map((x, i) => 
-          this.state[x] && <Feed key={i} idx={i+1} address={x} {...this.state[x]} />
+        <Medianizer medianizer={this.state.medianizer} value={this.state.value} valid={this.state.valid} />
+        <p>
+          This value is taken from the following feeds:
+        </p>
+        {feeds.map((x, i) =>
+          this.state[x] && <Feed key={i} idx={i + 1} address={x} {...this.state[x]} />
         )}
       </div>
     );
