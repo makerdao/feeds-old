@@ -90,6 +90,7 @@ class App extends Component {
     initWeb3(web3);
     web3.version.getNetwork((error, network) => {
       if (!error) {
+        web3.reset(true);
         const medianizerAddress = network === "1" ? '0x729D19f657BD0614b4985Cf1D82531c67569197B' : '0xa944bd4b25c9f186a846fd5668941aa3d3b8425f';
         const med = web3.eth.contract(medianizerAbi).at(medianizerAddress);
         window.med = med;
@@ -133,7 +134,7 @@ class App extends Component {
         if (prevState[feed]) {
           state[feed] = {
             ...prevState[feed],
-            expires: prevState[feed].expires - 1
+            expires: prevState[feed].expires - 5
           }
         }
       });
@@ -143,7 +144,7 @@ class App extends Component {
 
   componentDidMount() {
     setTimeout(() => this.init(), 500);
-    setInterval(() => this.updateExpirations(), 1000);
+    setInterval(() => this.updateExpirations(), 5000);
   }
   render() {
     const feeds = this.state.feeds;

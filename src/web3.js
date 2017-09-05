@@ -5,8 +5,7 @@ const web3 = new Web3();
 export default web3;
 
 export const initWeb3 = (web3) => {
-  // new Web3.providers.HttpProvider('http://localhost:8545')
-  if (window.web3 && window.web3.currentProvider) {
+  if (window.web3) {
     web3.setProvider(window.web3.currentProvider);  
   } else {
     web3.setProvider(new Web3.providers.HttpProvider('http://localhost:8545'));
