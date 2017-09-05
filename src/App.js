@@ -26,14 +26,15 @@ const read = (contract, func, ...args) => {
 
 class App extends Component {
   state = {
-    medianizer: null,
-    value: null,
-    valid: null,
+    medianizer: {
+      address: null,
+      value: null,
+      valid: null,
+    },
     feeds: []
   }
 
   loadMedianizer = async (med) => {
-    const values = [];
     this.updateMedianizer(med);
     web3.eth.filter({ address: med.address }, (error, result) => {
       if (!error) {
@@ -42,6 +43,7 @@ class App extends Component {
     });
     const res = await read(med, 'next');
     const next = web3.toDecimal(res);
+    const values = [];
     for (let i = 1; i < next; i++) {
       values.push(read(med, 'values', toBytes12(i)));
     };
@@ -60,10 +62,10 @@ class App extends Component {
 
   updateMedianizer = async (med) => {
     const value = await read(med, 'peek');
-    this.setState({
-      value: web3.fromWei(value[0]),
-      valid: value[1]
-    });
+    const medianizer = {...this.state.medianizer};
+    medianizer.value = web3.fromWei(value[0]);
+    medianizer.valid = value[1];
+    this.setState({ medianizer });
   }
 
   updateFeed = async (address, fromEvent) => {
@@ -95,7 +97,9 @@ class App extends Component {
         const med = web3.eth.contract(medianizerAbi).at(medianizerAddress);
         window.med = med;
         this.setState({
-          medianizer: medianizerAddress,
+          medianizer: {
+            address: medianizerAddress
+          },
           noConnection: false
         });
         this.loadMedianizer(med);
@@ -118,7 +122,9 @@ class App extends Component {
       .then(json => {
         const value = web3.fromWei(json.result);
         this.setState({
-          value
+          medianizer: {
+            value
+          }
         })
       })
       .catch(error => {
@@ -150,7 +156,7 @@ class App extends Component {
     const feeds = this.state.feeds;
     return (
       <div>
-        <Medianizer medianizer={this.state.medianizer} value={this.state.value} valid={this.state.valid} />
+        <Medianizer {...this.state.medianizer} />
         {this.state.noConnection === true &&
           <p>This data was loaded from Etherscan. Please use an Ethereum enabled browser like Mist, or install Metamask or Parity extensions to view this feed's details.</p>
         }

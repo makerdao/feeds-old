@@ -10,7 +10,7 @@ class Feed extends Component {
     return (
       <div>
         <p>
-          <b>{this.props.idx}</b> {value} <b>{this.props.valid ? 'valid' : 'expired'}</b> expires {expires}.{updated && `Updated ${updated}.`} (<a href={`https://etherscan.io/address/${this.props.address}`} target="_blank">Etherscan</a>)
+          <b>{this.props.idx}</b> {value} <b>{this.props.valid && this.props.expires > 0 ? 'valid' : 'expired'}</b> expires {expires}.{updated && `Updated ${updated}.`} (<a href={`https://etherscan.io/address/${this.props.address}`} target="_blank">Etherscan</a>)
         </p>
       </div>
     );

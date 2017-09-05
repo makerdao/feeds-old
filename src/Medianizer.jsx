@@ -7,7 +7,7 @@ class Medianizer extends Component {
     return (
       <div>
         <h1>ETH/USD</h1>
-        <h2>Current price: {value}</h2>
+        <h2>Current price: {value} (<a href={`https://etherscan.io/address/${this.props.address}`} target="_blank">Etherscan</a>)</h2>
       </div>
     );
   }
