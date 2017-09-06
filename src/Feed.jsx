@@ -7,7 +7,7 @@ class Feed extends Component {
     const value = web3.toBigNumber(this.props.value).toFixed(3);
     const expires = moment.duration(this.props.expires, "seconds").humanize(true);
     const updated = this.props.updated ? moment.unix(this.props.updated).fromNow() : this.props.updated;
-    const color = this.props.expires > 0 ? '#444' : 'red';
+    const color = this.props.expires < 0 ? 'red' : ( this.props.expires < 3600 ? 'orange' : '#444');
     return (
       <div>
         <p style={{color}}>
