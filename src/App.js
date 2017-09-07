@@ -105,7 +105,10 @@ class App extends Component {
         this.loadMedianizer(med);
       } else {
         this.setState({
-          noConnection: true
+          medianizer: {
+            address: '0x729D19f657BD0614b4985Cf1D82531c67569197B'
+          },
+          noConnection: true,
         })
         this.loadFromEtherscan('0x729D19f657BD0614b4985Cf1D82531c67569197B');
       }
@@ -120,12 +123,9 @@ class App extends Component {
         }
       })
       .then(json => {
-        const value = web3.fromWei(json.result);
-        this.setState({
-          medianizer: {
-            value
-          }
-        })
+        const medianizer = {...this.state.medianizer};
+        medianizer.value = web3.fromWei(json.result);
+        this.setState({ medianizer });
       })
       .catch(error => {
         console.log(error);
