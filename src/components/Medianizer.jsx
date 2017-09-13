@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import web3 from './web3';
+import web3 from '../web3';
 
 class Medianizer extends Component {
   render() {

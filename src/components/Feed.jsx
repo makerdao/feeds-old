@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import moment from 'moment';
-import web3 from './web3';
+import web3 from '../web3';
 
 class Feed extends Component {
   render() {

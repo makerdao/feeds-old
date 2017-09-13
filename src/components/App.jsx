@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import BigNumber from 'bignumber.js';
-import web3, { initWeb3 } from './web3';
+import web3, { initWeb3 } from '../web3';
 import Medianizer from './Medianizer';
 import Feed from './Feed';
 import './App.css';
 
-const readableAbi = require('./abi/readable.json');
-const medianizerAbi = require('./abi/medianizer.json');
+const readableAbi = require('../abi/readable.json');
+const medianizerAbi = require('../abi/medianizer.json');
 
 const repeat = (x, n) => n > 0 ? new Array(n + 1).join(x) : ""
 //const rpad = (x, y, n) => x + repeat(y, n - x.length)
@@ -22,7 +22,6 @@ const read = (contract, func, ...args) => {
     });
   });
 }
-
 
 class App extends Component {
   state = {
