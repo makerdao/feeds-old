@@ -2,7 +2,7 @@
   "name": "feeds",
   "version": "0.1.0",
   "private": true,
-
+  "homepage": "https://makerdao.com/feeds",
   "dependencies": {
     "gh-pages": "^1.0.0",
     "moment": "^2.18.1",
