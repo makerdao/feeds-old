@@ -29,13 +29,13 @@ class App extends Component {
       address: null,
       value: null,
       valid: null,
-    },
-    feeds: []
+      feeds: {},
+    }
   }
 
   loadMedianizer = async (med) => {
     this.updateMedianizer(med);
-    web3.eth.filter({ address: med.address }, (error, result) => {
+    web3.eth.filter({ address: med.address, fromBlock: 'latest' }, (error, result) => {
       if (!error) {
         this.updateMedianizer(med);
       }
@@ -47,11 +47,17 @@ class App extends Component {
       values.push(read(med, 'values', toBytes12(i)));
     };
     const feeds = await Promise.all(values);
-    this.setState({ feeds });
+    const medianizer = { ...this.state.medianizer };
+    Object.values(feeds).forEach((x, i) => {
+      medianizer.feeds[x] = {
+        idx: i
+      };
+    });
+    this.setState({ medianizer });
     window.feeds = feeds;
     feeds.forEach(address => {
       this.updateFeed(address, false);
-      web3.eth.filter({ address }, (error, result) => {
+      web3.eth.filter({ address, fromBlock: 'latest' }, (error, result) => {
         if (!error) {
           this.updateFeed(result.address, true);
         }
@@ -61,30 +67,31 @@ class App extends Component {
 
   updateMedianizer = async (med) => {
     const value = await read(med, 'peek');
-    const medianizer = {...this.state.medianizer};
+    const medianizer = { ...this.state.medianizer };
     medianizer.value = web3.fromWei(value[0]);
     medianizer.valid = value[1];
     this.setState({ medianizer });
   }
 
   updateFeed = async (address, fromEvent) => {
-    const c = web3.eth.contract(readableAbi).at(address);
+    const fab = web3.eth.contract(readableAbi);
+    window.fab = fab;
+    const c = fab.at(address);
     const value = await read(c, 'peek');
     const zzz = await read(c, 'zzz');
     const owner = await read(c, 'owner');
-    this.setState((prevState) => {
-      prevState[address] && console.log(`${address} updated to ${web3.fromWei(value[0])} from ${prevState[address].value}`);
-      return {
-        [address]: {
-          value: web3.fromWei(value[0]),
-          zzz: web3.toDecimal(zzz),
-          expires: web3.toDecimal(zzz) - (Math.floor(Date.now() / 1000)),
-          owner: owner,
-          valid: value[1],
-          updated: fromEvent ? Math.floor(Date.now() / 1000) : null
-        }
-      }
-    });
+
+    const medianizer = { ...this.state.medianizer };
+    medianizer.feeds[address] = {
+      value: web3.fromWei(value[0]),
+      zzz: web3.toDecimal(zzz),
+      expires: web3.toDecimal(zzz) - (Math.floor(Date.now() / 1000)),
+      owner: owner,
+      valid: value[1],
+      updated: fromEvent ? Math.floor(Date.now() / 1000) : null,
+      idx: medianizer.feeds[address].idx
+    }
+    this.setState({ medianizer });
   }
 
   init = () => {
@@ -95,10 +102,10 @@ class App extends Component {
         const medianizerAddress = network === "1" ? '0x729D19f657BD0614b4985Cf1D82531c67569197B' : '0xa944bd4b25c9f186a846fd5668941aa3d3b8425f';
         const med = web3.eth.contract(medianizerAbi).at(medianizerAddress);
         window.med = med;
+        const medianizer = { ...this.state.medianizer };
+        medianizer.address = medianizerAddress;
         this.setState({
-          medianizer: {
-            address: medianizerAddress
-          },
+          medianizer,
           noConnection: false
         });
         this.loadMedianizer(med);
@@ -122,7 +129,7 @@ class App extends Component {
         }
       })
       .then(json => {
-        const medianizer = {...this.state.medianizer};
+        const medianizer = { ...this.state.medianizer };
         medianizer.value = web3.fromWei(json.result);
         this.setState({ medianizer });
       })
@@ -132,27 +139,19 @@ class App extends Component {
   }
 
   updateExpirations = () => {
-    const feeds = this.state.feeds;
-    this.setState(prevState => {
-      const state = {...this.prevState};
-      feeds.forEach(feed => {
-        if (prevState[feed]) {
-          state[feed] = {
-            ...prevState[feed],
-            expires: prevState[feed].expires - 5
-          }
-        }
-      });
-      return state;
-    })
+    const medianizer = this.state.medianizer;
+    Object.keys(medianizer.feeds).forEach(x => {
+      medianizer.feeds[x].expires = web3.toDecimal(medianizer.feeds[x].zzz) - (Math.floor(Date.now() / 1000))
+    });
+    this.setState({ medianizer });
   }
 
   componentDidMount() {
     setTimeout(() => this.init(), 500);
-    setInterval(() => this.updateExpirations(), 5000);
+    setInterval(() => this.updateExpirations(), 60000);
   }
   render() {
-    const feeds = this.state.feeds;
+    const feeds = this.state.medianizer.feeds;
     return (
       <div>
         <Medianizer {...this.state.medianizer} />
@@ -160,8 +159,8 @@ class App extends Component {
           <p>This data was loaded from Etherscan. Please use an Ethereum enabled browser like Mist, or install Metamask or Parity extensions to view this feed's details.</p>
         }
         {this.state.noConnection === false &&
-          feeds.map((x, i) =>
-            this.state[x] && <Feed key={i} idx={i + 1} address={x} {...this.state[x]} />
+          Object.keys(feeds).map((x, i) =>
+            feeds[x].value && <Feed key={i} address={x} {...feeds[x]} />
           )
         }
       </div>

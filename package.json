@@ -2,13 +2,13 @@
   "name": "feeds",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://makerdao.com/feeds",
+
   "dependencies": {
     "gh-pages": "^1.0.0",
     "moment": "^2.18.1",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "react-scripts": "1.0.12",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "react-scripts": "1.0.14",
     "web3": "^0.20.1"
   },
   "scripts": {

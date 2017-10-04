@@ -11,7 +11,7 @@ class Feed extends Component {
     return (
       <div>
         <p style={{color}}>
-          <b>{this.props.idx}</b> {value} {this.props.valid && this.props.expires > 0 ? 'expires' : 'expired'} {expires}.{updated && `Updated ${updated}.`} (<a href={`https://etherscan.io/address/${this.props.address}`} target="_blank">Etherscan</a>)
+          <b>{this.props.idx + 1}</b> {value} {this.props.valid && this.props.expires > 0 ? 'expires' : 'expired'} {expires}.{updated && `Updated ${updated}.`} (<a href={`https://etherscan.io/address/${this.props.address}`} target="_blank">Etherscan</a>)
         </p>
       </div>
     );
