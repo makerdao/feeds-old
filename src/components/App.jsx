@@ -17,10 +17,17 @@ const toBytes12 = (wad) => `0x${lpad(toHex(`${wad}`), "0", 24)}`
 const read = (contract, func, ...args) => {
   return new Promise((resolve, reject) => {
     contract[func](...args, (error, result) => {
-      if (error) reject(error);
-      else resolve(result);
+      error ? reject(error) : resolve(result);
     });
   });
+}
+
+const getBalance = (web3, account) => {
+  return new Promise((resolve, reject) => {
+    web3.eth.getBalance(account, (error, result) => {
+      error ? reject(error) : resolve(result);
+    });
+  })
 }
 
 class App extends Component {
@@ -70,6 +77,8 @@ class App extends Component {
     const medianizer = { ...this.state.medianizer };
     medianizer.value = web3.fromWei(value[0]);
     medianizer.valid = value[1];
+    //const speech = web3.toBigNumber(medianizer.value).toFixed(3);
+    //window.speechSynthesis.speak(new SpeechSynthesisUtterance(`New price is ${speech}`));
     this.setState({ medianizer });
   }
 
@@ -89,6 +98,7 @@ class App extends Component {
       owner: owner,
       valid: value[1],
       updated: fromEvent ? Math.floor(Date.now() / 1000) : null,
+      balance: await getBalance(web3, owner),
       idx: medianizer.feeds[address].idx
     }
     this.setState({ medianizer });
