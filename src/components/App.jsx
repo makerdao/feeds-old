@@ -56,19 +56,23 @@ class App extends Component {
     const feeds = await Promise.all(values);
     const medianizer = { ...this.state.medianizer };
     Object.values(feeds).forEach((x, i) => {
-      medianizer.feeds[x] = {
-        idx: i
-      };
+      if (x !== "0x0000000000000000000000000000000000000000") {
+        medianizer.feeds[x] = {
+          idx: i
+        };
+      }
     });
     this.setState({ medianizer });
     window.feeds = feeds;
     feeds.forEach(address => {
-      this.updateFeed(address, false);
-      web3.eth.filter({ address, fromBlock: 'latest' }, (error, result) => {
-        if (!error) {
-          this.updateFeed(result.address, true);
-        }
-      });
+      if (address !== "0x0000000000000000000000000000000000000000") {
+        this.updateFeed(address, false);
+        web3.eth.filter({ address, fromBlock: 'latest' }, (error, result) => {
+          if (!error) {
+            this.updateFeed(result.address, true);
+          }
+        });
+      }
     });
   }
 
