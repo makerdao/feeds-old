@@ -8,6 +8,8 @@ import './App.css';
 const readableAbi = require('../abi/readable.json');
 const medianizerAbi = require('../abi/medianizer.json');
 
+let defaultMedianizer = '0x729D19f657BD0614b4985Cf1D82531c67569197B';
+
 const repeat = (x, n) => n > 0 ? new Array(n + 1).join(x) : ""
 //const rpad = (x, y, n) => x + repeat(y, n - x.length)
 const lpad = (x, y, n) => repeat(y, n - x.length) + x
@@ -113,7 +115,11 @@ class App extends Component {
     web3.version.getNetwork((error, network) => {
       if (!error) {
         web3.reset(true);
-        const medianizerAddress = network === "1" ? '0x729D19f657BD0614b4985Cf1D82531c67569197B' : '0xa944bd4b25c9f186a846fd5668941aa3d3b8425f';
+        const hash = window.location.hash.substr(1);
+        if (hash) {
+          defaultMedianizer = hash;
+        }
+        const medianizerAddress = network === "1" ? defaultMedianizer : '0xa944bd4b25c9f186a846fd5668941aa3d3b8425f';
         const med = web3.eth.contract(medianizerAbi).at(medianizerAddress);
         window.med = med;
         const medianizer = { ...this.state.medianizer };
@@ -126,11 +132,11 @@ class App extends Component {
       } else {
         this.setState({
           medianizer: {
-            address: '0x729D19f657BD0614b4985Cf1D82531c67569197B'
+            address: defaultMedianizer
           },
           noConnection: true,
         })
-        this.loadFromEtherscan('0x729D19f657BD0614b4985Cf1D82531c67569197B');
+        this.loadFromEtherscan(defaultMedianizer);
       }
     });
   }
