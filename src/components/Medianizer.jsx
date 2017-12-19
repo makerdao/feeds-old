@@ -7,10 +7,14 @@ class Medianizer extends Component {
     feeds: {}
   }
   render() {
+    let title = "ETH/USD"
+    if (this.props.address && this.props.address.toLowerCase() === '0x99041f808d598b782d5a3e498681c2452a31da08') {
+      title = "MKR/USD"
+    }
     const value = web3.toBigNumber(this.props.value).toFixed(3);
     return (
       <div>
-        <h1>ETH/USD</h1>
+        <h1>{title}</h1>
         <h2>Current price: {value} (<a href={`https://etherscan.io/address/${this.props.address}`} target="_blank">Etherscan</a>)</h2>
       </div>
     );
