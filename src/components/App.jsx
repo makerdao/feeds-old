@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import BigNumber from 'bignumber.js';
 import web3, { initWeb3 } from '../web3';
 import Medianizer from './Medianizer';
 import Feed from './Feed';
@@ -13,7 +12,7 @@ let defaultMedianizer = '0x729D19f657BD0614b4985Cf1D82531c67569197B';
 const repeat = (x, n) => n > 0 ? new Array(n + 1).join(x) : ""
 //const rpad = (x, y, n) => x + repeat(y, n - x.length)
 const lpad = (x, y, n) => repeat(y, n - x.length) + x
-const toHex = wad => new BigNumber(wad.replace(".", "")).toString(16)
+const toHex = wad => new web3.BigNumber(wad.replace(".", "")).toString(16)
 const toBytes12 = (wad) => `0x${lpad(toHex(`${wad}`), "0", 24)}`
 
 const read = (contract, func, ...args) => {
@@ -44,11 +43,6 @@ class App extends Component {
 
   loadMedianizer = async (med) => {
     this.updateMedianizer(med);
-    web3.eth.filter({ address: med.address, fromBlock: 'latest' }, (error, result) => {
-      if (!error) {
-        this.updateMedianizer(med);
-      }
-    });
     const res = await read(med, 'next');
     const next = web3.toDecimal(res);
     const values = [];
@@ -72,6 +66,7 @@ class App extends Component {
         web3.eth.filter({ address, fromBlock: 'latest' }, (error, result) => {
           if (!error) {
             this.updateFeed(result.address, true);
+            this.updateMedianizer(med);
           }
         });
       }
