@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Link from './Link';
 import moment from 'moment';
 import web3 from '../web3';
 
@@ -12,7 +13,7 @@ class Feed extends Component {
     return (
       <div>
         <p style={{color}}>
-          <b>{this.props.idx + 1}</b> {value} {this.props.valid && this.props.expires > 0 ? 'expires' : 'expired'} {expires}.{updated && `Updated ${updated}.`} <a href={`https://etherscan.io/address/${this.props.address}`} target="_blank">{this.props.address}</a>
+          <b>{this.props.idx + 1}</b> {value} {this.props.valid && this.props.expires > 0 ? 'expires' : 'expired'} {expires}.{updated && `Updated ${updated}.`} <Link href={`https://etherscan.io/address/${this.props.address}`} text={this.props.address} />
         </p>
       </div>
     );

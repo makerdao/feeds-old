@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import web3, { initWeb3 } from '../web3';
 import Medianizer from './Medianizer';
+import Link from './Link';
 import './App.css';
 
 class App extends Component {
@@ -51,7 +52,7 @@ class App extends Component {
     return (
       <div>
         <p>
-          Official Maker Feeds used for the Dai Stablecoin System. For more info visit <a href="https://chat.makerdao.com/channel/public-feeds">https://chat.makerdao.com/channel/public-feeds</a>
+          Official Maker Feeds used for the Dai Stablecoin System. For more info visit <Link href="https://chat.makerdao.com/channel/public-feeds" />
         </p>
         {
           this.state.network &&

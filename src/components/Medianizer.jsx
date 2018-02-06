@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Feed from './Feed';
+import Link from './Link';
 import web3 from '../web3';
 
 const readableAbi = require('../abi/readable.json');
@@ -125,7 +126,7 @@ class Medianizer extends Component {
       <div>
         <h1>{this.props.title} {value}</h1>
         <h3>
-        <a href={`https://etherscan.io/address/${this.props.address}`} target="_blank">{this.props.address}</a>
+          <Link href={`https://etherscan.io/address/${this.props.address}`} text={this.props.address} />
         </h3>
         <p>
           <button onClick={this.toggle}>
