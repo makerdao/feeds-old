@@ -14,8 +14,10 @@ class Medianizer extends Component {
     const value = web3.toBigNumber(this.props.value).toFixed(3);
     return (
       <div>
-        <h1>{title}</h1>
-        <h2>Current price: {value} (<a href={`https://etherscan.io/address/${this.props.address}`} target="_blank">Etherscan</a>)</h2>
+        <h1>{title} {value}</h1>
+        <h3>
+        <a href={`https://etherscan.io/address/${this.props.address}`} target="_blank">{this.props.address}</a>
+        </h3>
       </div>
     );
   }

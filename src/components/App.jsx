@@ -23,13 +23,13 @@ const read = (contract, func, ...args) => {
   });
 }
 
-const getBalance = (web3, account) => {
-  return new Promise((resolve, reject) => {
-    web3.eth.getBalance(account, (error, result) => {
-      error ? reject(error) : resolve(result);
-    });
-  })
-}
+// const getBalance = (web3, account) => {
+//   return new Promise((resolve, reject) => {
+//     web3.eth.getBalance(account, (error, result) => {
+//       error ? reject(error) : resolve(result);
+//     });
+//   })
+// }
 
 class App extends Component {
   state = {
@@ -99,7 +99,7 @@ class App extends Component {
       owner: owner,
       valid: value[1],
       updated: fromEvent ? Math.floor(Date.now() / 1000) : null,
-      balance: await getBalance(web3, owner),
+      //balance: await getBalance(web3, owner),
       idx: medianizer.feeds[address].idx
     }
     this.setState({ medianizer });
