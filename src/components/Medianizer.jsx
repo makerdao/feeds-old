@@ -126,7 +126,7 @@ class Medianizer extends Component {
       <div>
         <h1>{this.props.title} {value}</h1>
         <h3>
-          <Link href={`https://etherscan.io/address/${this.props.address}`} text={this.props.address} />
+          <Link href={`https://${this.props.network === 'kovan' ? 'kovan.' : ''}etherscan.io/address/${this.props.address}`} text={this.props.address} />
         </h3>
         <p>
           <button onClick={this.toggle}>
@@ -136,7 +136,7 @@ class Medianizer extends Component {
         <div className={this.state.show}>
           {
             Object.keys(feeds).map((x, i) =>
-              feeds[x].value && <Feed key={i} address={x} {...feeds[x]} />
+              feeds[x].value && <Feed network={this.props.network} key={i} address={x} {...feeds[x]} />
             )
           }
         </div>

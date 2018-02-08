@@ -52,13 +52,13 @@ class App extends Component {
     return (
       <div>
         <p>
-          Official Maker Feeds used for the Dai Stablecoin System. For more info visit <Link href="https://chat.makerdao.com/channel/public-feeds" />
+          Official {network} Maker Feeds used for the Dai Stablecoin System. For more info visit <Link href="https://chat.makerdao.com/channel/public-feeds" />
         </p>
         {
           this.state.network &&
           <div>
-            <Medianizer address={this.data[network][0].address} title={this.data[network][0].title} />
-            <Medianizer address={this.data[network][1].address} title={this.data[network][1].title} />
+            <Medianizer network={network} address={this.data[network][0].address} title={this.data[network][0].title} />
+            <Medianizer network={network} address={this.data[network][1].address} title={this.data[network][1].title} />
           </div>
         }
       </div>
