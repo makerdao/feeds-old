@@ -52,7 +52,7 @@ class App extends Component {
     return (
       <div>
         <p>
-          Official {network} Maker Feeds used for the Dai Stablecoin System. For more info visit <Link href="https://chat.makerdao.com/channel/public-feeds" />
+          Official {network} Maker Feeds used for the Dai Stablecoin System. For more info visit <Link href="https://chat.makerdao.com/channel/feeds" />
         </p>
         {
           this.state.network &&
