@@ -122,26 +122,32 @@ class Medianizer extends Component {
   render() {
     const value = web3.toBigNumber(this.state.value).toFixed(3);
     const feeds = this.state.feeds;
-    return (
-      <div>
-        <h1>{this.props.title} {value}</h1>
-        <h3>
-          <Link href={`https://${this.props.network === 'kovan' ? 'kovan.' : ''}etherscan.io/address/${this.props.address}`} text={this.props.address} />
-        </h3>
-        <p>
-          <button onClick={this.toggle}>
-            Click to {this.state.show === 'show' ? 'hide' : 'show'} details
-          </button>
-        </p>
-        <div className={this.state.show}>
-          {
-            Object.keys(feeds).map((x, i) =>
-              feeds[x].value && <Feed network={this.props.network} key={i} address={x} {...feeds[x]} />
-            )
-          }
+    if (!this.state.value) {
+      return (
+        <h1>Loading...</h1>
+      )
+    } else {
+      return (
+        <div>
+          <h1>{this.props.title} {value}</h1>
+          <h3>
+            <Link href={`https://${this.props.network === 'kovan' ? 'kovan.' : ''}etherscan.io/address/${this.props.address}`} text={this.props.address} />
+          </h3>
+          <p>
+            <button onClick={this.toggle}>
+              Click to {this.state.show === 'show' ? 'hide' : 'show'} details
+            </button>
+          </p>
+          <div className={this.state.show}>
+            {
+              Object.keys(feeds).map((x, i) =>
+                feeds[x].value && <Feed network={this.props.network} key={i} address={x} {...feeds[x]} />
+              )
+            }
+          </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 
