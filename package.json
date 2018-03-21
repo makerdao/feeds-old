@@ -4,8 +4,8 @@
   "private": true,
   "homepage": "https://makerdao.com/feeds",
   "dependencies": {
-    "gh-pages": "^1.0.0",
-    "moment": "^2.18.1",
+    "gh-pages": "^1.1.0",
+    "moment": "^2.21.0",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-scripts": "1.1.0",
