@@ -57,8 +57,10 @@ class App extends Component {
         {
           this.state.network &&
           <div>
+            <React.StrictMode>
             <Medianizer network={network} address={this.data[network][0].address} title={this.data[network][0].title} />
             <Medianizer network={network} address={this.data[network][1].address} title={this.data[network][1].title} />
+            </React.StrictMode>
           </div>
         }
       </div>
