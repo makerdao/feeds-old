@@ -5,11 +5,11 @@
   "homepage": "https://makerdao.com/feeds",
   "dependencies": {
     "gh-pages": "^1.1.0",
-    "moment": "^2.21.0",
+    "moment": "^2.22.2",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
     "react-scripts": "1.1.0",
-    "web3": "^0.20.4"
+    "web3": "^0.20.6"
   },
   "scripts": {
     "start": "react-scripts start",
