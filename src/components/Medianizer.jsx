@@ -122,6 +122,7 @@ class Medianizer extends Component {
   render() {
     const value = web3.toBigNumber(this.state.value).toFixed(3);
     const feeds = this.state.feeds;
+    const api = this.props.network === 'mainnet' ? '' : `${this.props.network}.`;
     if (!this.state.value) {
       return (
         <h1>Loading...</h1>
@@ -131,7 +132,7 @@ class Medianizer extends Component {
         <div>
           <h1>{this.props.title} {value}</h1>
           <h3>
-            <Link href={`https://${this.props.network === 'kovan' ? 'kovan.' : ''}etherscan.io/address/${this.props.address}`} text={this.props.address} />
+            <Link href={`https://${api}etherscan.io/address/${this.props.address}`} text={this.props.address} />
           </h3>
           <p>
             <button onClick={this.toggle}>

@@ -26,6 +26,12 @@ class App extends Component {
         address: '0x02998f73fabb52282664094b0ff87741a1ce9030',
         title: 'MKR/USD'
       }
+    ],
+    rinkeby: [
+      {
+        address: '0xE39451e34f8FB108a8F6d4cA6C68dd38f37d26E3',
+        title: 'REP/USD'
+      }
     ]
   }
 
@@ -40,6 +46,8 @@ class App extends Component {
         web3.reset(true);
         if (network === "42") {
           this.setState({ network: 'kovan' })
+        } else if (network === "4") {
+          this.setState({ network: 'rinkeby' })
         } else {
           this.setState({ network: 'mainnet' })
         }
@@ -58,8 +66,9 @@ class App extends Component {
           this.state.network &&
           <div>
             <React.StrictMode>
-            <Medianizer network={network} address={this.data[network][0].address} title={this.data[network][0].title} />
-            <Medianizer network={network} address={this.data[network][1].address} title={this.data[network][1].title} />
+              {this.data[network].map((med, i) => {
+                return <Medianizer key={i} network={network} address={med.address} title={med.title} />
+              })}
             </React.StrictMode>
           </div>
         }
