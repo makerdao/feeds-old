@@ -15,6 +15,10 @@ class App extends Component {
       {
         address: '0x99041F808D598B782D5a3e498681C2452A31da08',
         title: 'MKR/USD'
+      },
+      {
+        address: '0xF5f94b7F9De14D43112e713835BCef2d55b76c1C',
+        title: 'REP/USD'
       }
     ],
     kovan: [
