@@ -29,6 +29,10 @@ class App extends Component {
       {
         address: '0x02998f73fabb52282664094b0ff87741a1ce9030',
         title: 'MKR/USD'
+      },
+      {
+        address: '0xF7F309b7f9074e18E84Fe9501A5b6b8FD2052FE2',
+        title: 'REP/USD'
       }
     ],
     rinkeby: [
