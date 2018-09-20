@@ -23,16 +23,20 @@ class App extends Component {
     ],
     kovan: [
       {
-        address: '0xa944bd4b25c9f186a846fd5668941aa3d3b8425f',
+        address: '0xa5aA4e07F5255E14F02B385b1f04b35cC50bdb66',
         title: 'ETH/USD'
       },
       {
-        address: '0x02998f73fabb52282664094b0ff87741a1ce9030',
+        address: '0xeBaa5D5cfe7F1201bebC6fb88240bBef285b4Fee',
         title: 'MKR/USD'
       },
       {
-        address: '0xF7F309b7f9074e18E84Fe9501A5b6b8FD2052FE2',
+        address: '0xFeB7d3aC74CB3c6d8E6Ae8882394F0C68363b944',
         title: 'REP/USD'
+      },
+      {
+        address: '0x8323ddE7e886684923599De7B719C984b5Cbd75b',
+        title: 'POLY/USD'
       }
     ],
     rinkeby: [
