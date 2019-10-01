@@ -55,7 +55,7 @@ class App extends Component {
     network: null,
   }
 
-  componentWillMount() {
+  componentDidMount() {
     initWeb3(web3);
     web3.version.getNetwork((error, network) => {
       if (!error) {
