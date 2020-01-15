@@ -17,6 +17,10 @@ class App extends Component {
         title: 'MKR/USD'
       },
       {
+        address: '0x23E2953aca3cc872c51d0d9e59DDC19d8F923F80',
+        title: 'BAT/USD'
+      },
+      {
         address: '0x6ADaDdA09EA70f82Cf6BBC4c890fD040F6Fb3d4b',
         title: 'POLY/USD'
       }
